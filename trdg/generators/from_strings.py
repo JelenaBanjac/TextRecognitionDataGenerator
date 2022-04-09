@@ -16,7 +16,7 @@ class GeneratorFromStrings:
         count=-1,
         fonts=[],
         language="en",
-        size=32,
+        size_percentage=32,
         skewing_angle=0,
         random_skew=False,
         blur=0,
@@ -31,7 +31,7 @@ class GeneratorFromStrings:
         orientation=0,
         space_width=1.0,
         character_spacing=0,
-        margins=(5, 5, 5, 5),
+        margins_percentage=(5, 5, 5, 5),
         fit=False,
         output_mask=False,
         word_split=False,
@@ -58,7 +58,7 @@ class GeneratorFromStrings:
             # reshape the strings
             self.strings = self.reshape_rtl(self.strings, self.rtl_shaper)
         self.language = language
-        self.size = size
+        self.size_percentage = size_percentage
         self.skewing_angle = skewing_angle
         self.random_skew = random_skew
         self.blur = blur
@@ -73,7 +73,7 @@ class GeneratorFromStrings:
         self.orientation = orientation
         self.space_width = space_width
         self.character_spacing = character_spacing
-        self.margins = margins
+        self.margins_percentage = margins_percentage
         self.fit = fit
         self.output_mask = output_mask
         self.word_split = word_split
@@ -100,7 +100,7 @@ class GeneratorFromStrings:
                 self.strings[(self.generated_count - 1) % len(self.strings)],
                 self.fonts[(self.generated_count - 1) % len(self.fonts)],
                 None,
-                self.size,
+                self.size_percentage,
                 None,
                 self.skewing_angle,
                 self.random_skew,
@@ -117,7 +117,7 @@ class GeneratorFromStrings:
                 self.orientation,
                 self.space_width,
                 self.character_spacing,
-                self.margins,
+                self.margins_percentage,
                 self.fit,
                 self.output_mask,
                 self.word_split,

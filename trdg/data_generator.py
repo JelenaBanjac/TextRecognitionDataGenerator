@@ -28,7 +28,7 @@ class FakeTextDataGenerator(object):
         text,
         font,
         out_dir,
-        size,
+        size_percentage,
         extension,
         skewing_angle,
         random_skew,
@@ -45,7 +45,7 @@ class FakeTextDataGenerator(object):
         orientation,
         space_width,
         character_spacing,
-        margins,
+        margins_percentage,
         fit,
         output_mask,
         word_split,
@@ -57,7 +57,19 @@ class FakeTextDataGenerator(object):
     ):
         image = None
 
-        margin_top, margin_left, margin_bottom, margin_right = margins
+        background_img, idx = background_generator.image(
+            None, None, image_dir
+        )
+        w, h = background_img.size[:2]
+        if orientation == 0:
+            size = int(size_percentage/100 * background_img.size[1])
+        elif orientation == 1:
+            size = int(size_percentage/100 * background_img.size[0])
+        else:
+            raise ValueError("Invalid orientation")
+
+        margin_top_percentage, margin_left_percentage, margin_bottom_percentage, margin_right_percentage = margins_percentage
+        margin_top, margin_left, margin_bottom, margin_right = int(margin_top_percentage/100*h), int(margin_left_percentage/100*w), int(margin_bottom_percentage/100*h), int(margin_right_percentage/100*w)
         horizontal_margin = margin_left + margin_right
         vertical_margin = margin_top + margin_bottom
 
@@ -170,7 +182,11 @@ class FakeTextDataGenerator(object):
             )
         else:
             background_img = background_generator.image(
-                background_height, background_width, image_dir
+                background_height, background_width, image_dir, idx
+            )
+            # Added to rotate the background together with text
+            background_img = background_img.rotate(
+                skewing_angle if not random_skew else random_angle, expand=1
             )
         background_mask = Image.new(
             "RGB", (background_width, background_height), (0, 0, 0)
